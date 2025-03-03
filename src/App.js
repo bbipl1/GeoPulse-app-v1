@@ -6,6 +6,7 @@ function App() {
     <div className="App">
       <h1>Here, all the map data with various map boundries will shown.</h1>
       <h1>new chnages has been applied.</h1>
+      <h1>new chnages has been applied.</h1>
     </div>
   );
 }
