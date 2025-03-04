@@ -1,0 +1,19 @@
+/* Default Light Theme */
+:root {
+  --primary-text: #1a202c; /* Dark Gray */
+  --secondary-text: #718096; /* Light Gray */
+  --accent-text: #3182ce; /* Blue */
+  --primary-bg: #ffffff; /* White */
+  --secondary-bg: #f1f5fa; /* Light Background */
+  --accent-bg: #c6ced4; /* Lighter Background */
+}
+
+/* Dark Theme */
+[data-theme="dark"] {
+  --primary-text: #e2e8f0; /* Light Gray */
+  --secondary-text: #88919d; /* Dark Gray */
+  --accent-text: #63b3ed; /* Light Blue */
+  --primary-bg: #2d3748; /* Dark Gray */
+  --secondary-bg: #282e3a; /* Dark Background */
+  --accent-bg: #15222c; /* Darker Background */
+}

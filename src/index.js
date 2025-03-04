@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import "leaflet/dist/leaflet.css";
+import "./styles/tailwindThemeStyles.css"
 
 import {
   createBrowserRouter,
@@ -10,7 +11,14 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
-import { Layout, Error, Home, CustomMap } from "./AllPages";
+import {
+  Layout,
+  Error,
+  Home,
+  CustomMap,
+  ThemeContextProvider,
+  AuthContextProvider,
+} from "./AllPages";
 
 const routerEle = (
   <Route path="/" element={<Layout />} errorElement={<Error />}>
@@ -27,6 +35,10 @@ const browserRoute = createBrowserRouter(createdRouterEle);
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <RouterProvider router={browserRoute}>{/* <App /> */}</RouterProvider>
+    <ThemeContextProvider>
+      <AuthContextProvider>
+        <RouterProvider router={browserRoute}>{/* <App /> */}</RouterProvider>
+      </AuthContextProvider>
+    </ThemeContextProvider>
   </React.StrictMode>
 );

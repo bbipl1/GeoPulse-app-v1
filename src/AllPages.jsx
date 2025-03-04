@@ -6,7 +6,11 @@ import Error from './layout/Error';
 import Layout from './layout/Layout';
 import CustomMap from './map/CustomMap';
 
-export {Home,Navbar,Footer,Error,Layout,CustomMap}
+// context-provider-start------------------------------------------------------
+import ThemeContextProvider from './contextProvider/ThemeContextProvider';
+import AuthContextProvider from './contextProvider/AuthContextProvider';
+// context-provider-end------------------------------------------------------
+export {Home,Navbar,Footer,Error,Layout,CustomMap,ThemeContextProvider,AuthContextProvider}
 
 const AllPages = () => {
     return (
