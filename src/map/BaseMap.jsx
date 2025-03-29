@@ -104,6 +104,8 @@ const BaseMap = () => {
       <MapContainer
         center={[26, 81]}
         zoom={5}
+        minZoom={1} // Minimum zoom allowed
+        maxZoom={18}
         style={{ width: "100%", height: "100%" }}
       >
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
