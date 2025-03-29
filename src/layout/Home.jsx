@@ -8,7 +8,7 @@ const Home = () => {
       {/* Hero Section */}
       <header className="bg-secondary-bg text-primary-text text-center py-20">
         <div className="max-w-3xl mx-auto px-4">
-          <h1 className="text-4xl font-bold mb-4">Track, Manage & Analyze Boundaries with GeoPulse</h1>
+          <h1 className="text-4xl font-bold mb-4">Track, Manage & Analyze Boundaries with universalmapsolutions</h1>
           <p className="text-lg mb-6 text-secondary-text">
             A powerful platform for visualizing and monitoring geographic boundaries in real-time.
           </p>

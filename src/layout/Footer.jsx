@@ -7,7 +7,7 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row justify-between items-center">
           {/* Logo and Description */}
           <div className="mb-4 md:mb-0">
-            <h2 className="text-2xl font-bold">GeoPulse</h2>
+            <h2 className="text-2xl font-bold">universalmapsolutions</h2>
             <p className="text-sm text-secondary-text">
               Providing precise geographical boundaries to target users.
             </p>
@@ -45,7 +45,7 @@ const Footer = () => {
 
         {/* Copyright */}
         <div className="text-center text-secondary-text text-sm mt-4">
-          &copy; {new Date().getFullYear()} GeoPulse. All rights reserved.
+          &copy; {new Date().getFullYear()} universalmapsolutions. All rights reserved.
         </div>
       </div>
     </footer>

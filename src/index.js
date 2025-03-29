@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import "leaflet/dist/leaflet.css";
 import "./styles/tailwindThemeStyles.css"
+// import "react-leaflet-markercluster/dist/styles.min.css";
 
 import {
   createBrowserRouter,
