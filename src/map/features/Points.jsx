@@ -8,7 +8,14 @@ import L from "leaflet";
 // ✅ Fetch points and convert UTM to Lat-Long
 const getPoints = async () => {
   const subUrl = "/api/v1/admin/map/point/get-all-points";
-  const points = await apiService.get(subUrl);
+  let points =null;
+  try {
+    
+    points = await apiService.get(subUrl);
+  } catch (error) {
+    console.log(error)
+    return ;
+  }
   const urn = points.data[0].crs.properties.name;
   const zn = urn.substring(urn.length - 2, urn.length);
 
@@ -47,7 +54,7 @@ const Points = () => {
 
   return (
     <MarkerClusterGroup>
-      {points.map((cord, index) => {
+      {points && Array.isArray(points) && points.length>0 &&  points.map((cord, index) => {
         const popupContent = cord.properties.name
           ? cord.properties.name
           : cord.properties.TEXTSTRING;
