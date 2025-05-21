@@ -12,8 +12,11 @@ const Home = () => {
           <p className="text-lg mb-6 text-secondary-text">
             A powerful platform for visualizing and monitoring geographic boundaries in real-time.
           </p>
-          <a href="/pages/custom-map" className="bg-accent-text hover:opacity-90 text-white px-6 py-3 rounded-lg">
+          <a href="/pages/custom-map" className="bg-accent-text hover:opacity-90 text-white px-6 py-3 rounded-lg m-1">
             Get Started
+          </a>
+          <a href="/pages/manage-data" className="bg-accent-text hover:opacity-90 text-white px-6 py-3 rounded-lg m-1">
+            Manage data
           </a>
         </div>
       </header>

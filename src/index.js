@@ -20,12 +20,14 @@ import {
   ThemeContextProvider,
   AuthContextProvider,
 } from "./AllPages";
+import ManageData from "./data/ManageData";
 
 const routerEle = (
   <Route path="/" element={<Layout />} errorElement={<Error />}>
     <Route path="" element={<Home />}></Route>
     <Route path="pages" element={<Outlet />}>
       <Route path="custom-map" element={<CustomMap />}></Route>
+      <Route path="manage-data" element={<ManageData />}></Route>
     </Route>
   </Route>
 );
