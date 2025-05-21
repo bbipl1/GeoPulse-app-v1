@@ -265,6 +265,7 @@ const ManageData = () => {
         <table className="table-auto w-full border border-gray-600 mt-8">
           <thead>
             <tr className="bg-gray-500 text-center text-white">
+              <th className="border border-gray-500 px-4 py-2">S/N</th>
               <th className="border border-gray-500 px-4 py-2">Country</th>
               <th className="border border-gray-500 px-4 py-2">State</th>
               <th className="border border-gray-500 px-4 py-2">District</th>
@@ -278,6 +279,7 @@ const ManageData = () => {
               allData?.map((data, ind) => {
                 return (
                   <tr className={`${ind%2===1?"bg-white":"bg-gray-200"}`}>
+                    <td className="text-center">{++ind}</td>
                     <td className="pl-4 border border-gray-300 px-4 py-2">{data?.name}</td>
                     <td className="border border-gray-300 px-4 py-2">
                       <div className="flex items-center justify-between gap-1">
