@@ -1,19 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { Filter, X } from "lucide-react";
 import BaseMap from "./BaseMap";
-import apiService from "../api/services/apiService";
+import useGetData from "./GetData";
 
 const CustomMap = () => {
   const [filterToggle, setFilterToggle] = useState(false);
 
-  const [states, setStates] = useState(null);
-  const [selectedState, setSelectedState] = useState(null);
-  const [districts, setDistricts] = useState(null);
-  const [selectedDistrict, setSelectedDistrict] = useState(null);
-  const [subDistricts, setSubDistricts] = useState(null);
-  const [selectedSubDistrict, setSelectedSubDistrict] = useState(null);
-
-  
+  const {
+    countries,
+    selectedCountry,
+    setSelectedCountry,
+    states,
+    selectedState,
+    setSelectedState,
+    districts,
+    setSelectedDistrict,
+    subDistricts,
+    setSelectedSubDistrict,
+    filteredData,
+  } = useGetData();
 
   const filterDat = {
     states_and_uts: [
@@ -896,39 +901,91 @@ const CustomMap = () => {
                 Filter options
               </div>
               <div className="">
-                <div className="grid grid-cols-2">
-                  <div>
-                    <label htmlFor="country">Country</label>
+                <div className="">
+                  <div className="">
+                    <label htmlFor="country" className="font-bold">Country</label>
                   </div>
                   <div>
-                    <select name="country" id="country" className="w-full">
+                    <select
+                      name="country"
+                      id="country"
+                      className="w-full"
+                      onChange={(e) => {
+                        setSelectedCountry(e.target.value);
+                      }}
+                    >
                       <option value="">Select</option>
-                      <option value="india">India</option>
+                      {countries &&
+                        Array.isArray(countries) &&
+                        countries.map((c) => <option>{c}</option>)}
                     </select>
                   </div>
                 </div>
-                <div className="grid grid-cols-2">
-                  <label htmlFor="state">State</label>
-                  <select name="state" id="state" className="w-full">
-                    <option value="">Select</option>
-                    
-                  </select>
+                <div className="">
+                  <div>
+                    <label htmlFor="state" className="font-bold">State</label>
+                  </div>
+
+                  <div>
+                    <select
+                      name="state"
+                      id="state"
+                      className="w-full"
+                      onChange={(e) => {
+                        setSelectedState(e.target.value);
+                      }}
+                    >
+                      <option value="">Select</option>
+                      {states &&
+                        Array.isArray(states) &&
+                        states.map((s) => <option>{s}</option>)}
+                    </select>
+                  </div>
                 </div>
-                <div className="grid grid-cols-2">
-                  <label htmlFor="district">District</label>
-                  <select name="district" id="district" className="w-full">
-                    <option value="">Select</option>
-                    <option value="saharsa">Saharsa</option>
-                    <option value="madhepura">Madhepura</option>
-                  </select>
+                <div className="">
+                  <div>
+                    <label htmlFor="district" className="font-bold">District</label>
+                  </div>
+
+                  <div>
+                    <select
+                      name="district"
+                      id="district"
+                      className="w-full"
+                      onChange={(e) => {
+                        setSelectedDistrict(e.target.value);
+                      }}
+                    >
+                      <option value="">Select</option>
+                      {districts &&
+                        Array.isArray(districts) &&
+                        districts.map((d) => <option>{d}</option>)}
+                    </select>
+                  </div>
                 </div>
-                <div className="grid grid-cols-2">
-                  <label htmlFor="block">Block</label>
-                  <select name="block" id="block" className="w-full">
-                    <option value="">Select</option>
-                    <option value="saharsa">sattar kataiya</option>
-                  </select>
+                <div className="">
+                  <div>
+                    <label htmlFor="block" className="font-bold">Block</label>
+                  </div>
+                  <div>
+                    <select
+                      name="block"
+                      id="block"
+                      className="w-full"
+                      onChange={(e) => {
+                        setSelectedSubDistrict(e.target.value);
+                      }}
+                    >
+                      <option value="">Select</option>
+                      {subDistricts &&
+                        Array.isArray(subDistricts) &&
+                        subDistricts.map((sd) => <option>{sd}</option>)}
+                    </select>
+                  </div>
                 </div>
+              </div>
+              <div>
+                <button onClick={()=>{alert("Loading please wait."); setFilterToggle(!filterToggle)}} className="w-full text-center rounded-md bg-green-500 text-white mt-4">Submit</button>
               </div>
             </div>
           </div>
