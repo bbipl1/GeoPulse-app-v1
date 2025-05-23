@@ -906,20 +906,26 @@ const CustomMap = () => {
           fillOpacity: 0.5,
           weight: 2,
         },
-        pointToLayer: function (feature, latlng) {
-          return L.marker(latlng).bindPopup(`
+        onEachFeature: function (feature, layer) {
+          // Define popup content based on feature properties
+          const popupContent = `
       <div>
         <strong>${feature.properties.name || "No name"}</strong><br/>
         Category: ${feature.properties.category || "N/A"}<br/>
-        Description: ${feature.properties.description || "N/A"}
+        Description: ${feature.properties.description || "N/A"}<br/>
+        Location: ${feature.properties.village || "Unknown"}, ${
+            feature.properties.district || ""
+          }, ${feature.properties.state || ""}
       </div>
-    `);
+    `;
+          layer.bindPopup(popupContent);
+        },
+        pointToLayer: function (feature, latlng) {
+          // Use marker for points
+          return L.marker(latlng);
         },
       }).addTo(map);
 
-      // map.fitBounds(layer.getBounds());
-
-      // Optional: cleanup
       return () => {
         map?.removeLayer(layer);
       };
