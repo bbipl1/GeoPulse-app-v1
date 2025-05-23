@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import apiService from "../api/services/apiService";
-import axios, { all } from "axios";
-import { CrossIcon, Edit2Icon, Goal, Locate, LocateFixed, LocateIcon, MapIcon, MapPin, PinIcon, PlusIcon, PointerIcon, SaveIcon, Trash2 } from "lucide-react";
+import { Edit2Icon, MapPin, PlusIcon, SaveIcon, Trash2 } from "lucide-react";
+import FeatureCollectionsManagement from "./featureCollectionsData/FeatureCollectionsManagement";
 
 const ManageData = () => {
+  const [manFeatureColl, setManFeatureColl] = useState(false);
   const [refresh, setRefresh] = useState(0);
   const [countries, setCountries] = useState(null);
   const [selectedCountry, setSelectedCountry] = useState(null);
@@ -13,10 +14,10 @@ const ManageData = () => {
   const [selectedDistrict, setSelectedDistrict] = useState(null);
   const [subDistricts, setSubDistricts] = useState(null);
   const [selectedSubDistrict, setSelectedSubDistrict] = useState(null);
-  const [gp,setGP]=useState(null);
-  const [selectedGP,setSelectedGP]=useState(null);
+  const [gp, setGP] = useState(null);
+  const [selectedGP, setSelectedGP] = useState(null);
   const [villages_towns, setVillages_Towns] = useState(null);
-  const [selectedVillages_towns,setSelectedVillages_towns]=useState(null);
+  const [selectedVillages_towns, setSelectedVillages_towns] = useState(null);
 
   const [allData, setAllData] = useState(null);
   const [filteredData, setFilteredData] = useState(null);
@@ -49,7 +50,7 @@ const ManageData = () => {
       .get(suburl)
       .then((res) => {
         setAllData(res?.data);
-        setFilteredData(res?.data)
+        setFilteredData(res?.data);
       })
       .catch((err) => {
         console.log(err);
@@ -63,8 +64,7 @@ const ManageData = () => {
       (d) => d?.name === selectedCountry
     );
 
-    if(filteredCountryData?.length>0){
-
+    if (filteredCountryData?.length > 0) {
       setFilteredData(filteredCountryData);
     }
     // console.log(filteredCountryData);
@@ -75,7 +75,7 @@ const ManageData = () => {
     const filteredStateData = filteredCountryData?.filter(
       (d) => d.state.name === selectedState
     );
-    if(filteredStateData?.length>0){
+    if (filteredStateData?.length > 0) {
       setFilteredData(filteredStateData);
     }
     // console.log(filteredStateData);
@@ -84,31 +84,45 @@ const ManageData = () => {
     setDistricts(Array.from(new Set(districtData))?.sort());
     // console.log(Array.from(new Set(districtData)));
     const filteredDistrictData = filteredStateData?.filter(
-      (d) => d?.district?.name?.toLowerCase() === selectedDistrict?.toLowerCase()
+      (d) =>
+        d?.district?.name?.toLowerCase() === selectedDistrict?.toLowerCase()
     );
 
-    if(filteredDistrictData?.length>0){
+    if (filteredDistrictData?.length > 0) {
       setFilteredData(filteredDistrictData);
     }
     // console.log(filteredDistrictData);
-    const subDistrictData = filteredDistrictData?.map((d) => d?.sub_district?.name);
+    const subDistrictData = filteredDistrictData?.map(
+      (d) => d?.sub_district?.name
+    );
     setSubDistricts(Array.from(new Set(subDistrictData))?.sort());
     // console.log(subDistrictData);
-    const filteredSubDistrictData=filteredDistrictData?.filter((d)=>(d?.sub_district?.name===selectedSubDistrict));
-    if(filteredSubDistrictData?.length>0){
-      setFilteredData(filteredSubDistrictData)
+    const filteredSubDistrictData = filteredDistrictData?.filter(
+      (d) => d?.sub_district?.name === selectedSubDistrict
+    );
+    if (filteredSubDistrictData?.length > 0) {
+      setFilteredData(filteredSubDistrictData);
     }
-    const gpData=filteredSubDistrictData?.map((g)=>(g?.gp?.name));
-    setGP(Array.from(new Set(gpData))?.sort())
+    const gpData = filteredSubDistrictData?.map((g) => g?.gp?.name);
+    setGP(Array.from(new Set(gpData))?.sort());
     // console.log(gpData)
-    const filteredGPData=filteredSubDistrictData?.filter((sd)=>(sd?.gp?.name===selectedGP));
-    if(filteredGPData?.length>0){
-      setFilteredData(filteredGPData)
+    const filteredGPData = filteredSubDistrictData?.filter(
+      (sd) => sd?.gp?.name === selectedGP
+    );
+    if (filteredGPData?.length > 0) {
+      setFilteredData(filteredGPData);
     }
-    const v_t_data=filteredGPData?.map((v)=>(v?.village_town?.name));
-    setVillages_Towns(Array.from(new Set(v_t_data)))
+    const v_t_data = filteredGPData?.map((v) => v?.village_town?.name);
+    setVillages_Towns(Array.from(new Set(v_t_data)));
     // console.log(v_t_data)
-  }, [allData, selectedCountry, selectedDistrict, selectedGP, selectedState, selectedSubDistrict]);
+  }, [
+    allData,
+    selectedCountry,
+    selectedDistrict,
+    selectedGP,
+    selectedState,
+    selectedSubDistrict,
+  ]);
 
   const handleNewCountry = () => {
     if (!newCountry?.toString()?.trim()) {
@@ -231,7 +245,7 @@ const ManageData = () => {
   };
 
   //   hanlde district user-interactions
-  const handleDistrictUpdate = (dis_name,dis_id) => {
+  const handleDistrictUpdate = (dis_name, dis_id) => {
     setIsDistrictEditable(false);
     if (!districtEditableText?.toString()?.trim()) {
       return alert("New district name is empty.");
@@ -299,7 +313,7 @@ const ManageData = () => {
   };
 
   //   hanlde sub-district user-interactions
-  const handleSubDistrictUpdate = (sub_dis_name,sub_dis_id) => {
+  const handleSubDistrictUpdate = (sub_dis_name, sub_dis_id) => {
     setIsSubDistrictEditable(false);
     if (!subDistrictEditableText?.toString()?.trim()) {
       return alert("New sub-district name is empty.");
@@ -367,7 +381,7 @@ const ManageData = () => {
   };
 
   //   hanlde gp user-interactions
-  const handleGPUpdate = (gp_name,gp_id) => {
+  const handleGPUpdate = (gp_name, gp_id) => {
     setIsGPEditable(false);
     if (!gpEditableText?.toString()?.trim()) {
       return alert("New gram panchayat name is empty.");
@@ -478,30 +492,40 @@ const ManageData = () => {
 
   return (
     <div>
-      <div className="ml-4">
-        <div>
-          <label className="w-full" htmlFor="new_country">
-            New Country
-          </label>
+      {manFeatureColl && (
+        <FeatureCollectionsManagement setManFeatureColl={setManFeatureColl} />
+      )}
+      <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-2">
+        <div className="ml-4">
+          <div>
+            <label className="w-full" htmlFor="new_country">
+              New Country
+            </label>
+          </div>
+          <div className="flex flex-row items-center cursor-pointer">
+            <input
+              type="text"
+              name="new_country"
+              id="new_country"
+              value={newCountry}
+              onChange={(e) => {
+                setNewCountry(e.target.value?.toString()?.trim());
+              }}
+              className="p-2 border-2 border-blue-400 rounded-md"
+            />
+            <PlusIcon onClick={handleNewCountry} />
+            {/* <button className="p-2 rounded-md border-4 border-red-500 ml-4 bg-black text-white" >Add new</button> */}
+          </div>
         </div>
-        <div className="flex flex-row items-center cursor-pointer">
-          <input
-            type="text"
-            name="new_country"
-            id="new_country"
-            value={newCountry}
-            onChange={(e) => {
-              setNewCountry(e.target.value?.toString()?.trim());
-            }}
-            className="p-2 border-2 border-blue-400 rounded-md"
-          />
-          <PlusIcon onClick={handleNewCountry} />
-          {/* <button className="p-2 rounded-md border-4 border-red-500 ml-4 bg-black text-white" >Add new</button> */}
+        <div>
+          <button onClick={()=>setManFeatureColl(true)} className="bg-blue-500 rounded-md text-white m-4 p-2">
+            Manage Feature Collections
+          </button>
         </div>
       </div>
 
       <div className="w-full">
-        <div className="w-full grid grid-cols-6 gap-4  p-2">
+        <div className="w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4  p-2">
           <div>
             <label htmlFor="country">Country</label>
             <select
@@ -577,10 +601,12 @@ const ManageData = () => {
               name="gram_panchayat"
               id="gram_panchayat"
               className="w-full rounded-md border-2 border-red-500 p-2"
-              onChange={(e)=>{setSelectedGP(e?.target?.value)}}
+              onChange={(e) => {
+                setSelectedGP(e?.target?.value);
+              }}
             >
               <option value="">Select</option>
-              {gp && Array.isArray(gp) && gp.map((g)=>(<option>{g}</option>))}
+              {gp && Array.isArray(gp) && gp.map((g) => <option>{g}</option>)}
             </select>
           </div>
           <div>
@@ -590,16 +616,20 @@ const ManageData = () => {
               name="village_town"
               id="village_town"
               className="w-full rounded-md border-2 border-red-500 p-2"
-               onChange={(e)=>{setSelectedVillages_towns(e?.target?.value)}}
+              onChange={(e) => {
+                setSelectedVillages_towns(e?.target?.value);
+              }}
             >
               <option value="">Select</option>
-              {villages_towns && Array.isArray(villages_towns) && villages_towns.map((v)=>(<option>{v}</option>))}
+              {villages_towns &&
+                Array.isArray(villages_towns) &&
+                villages_towns.map((v) => <option>{v}</option>)}
             </select>
           </div>
         </div>
       </div>
 
-      <div>
+      <div className="w-full overflow-x-auto overflow-y-auto">
         <table className="table-auto w-full border border-gray-600 mt-8">
           <thead>
             <tr className="bg-gray-500 text-center text-white">
@@ -630,7 +660,9 @@ const ManageData = () => {
                     </td>
                     <td className="border border-gray-300 px-4 py-2">
                       <div className="flex items-center justify-between gap-1">
-                        {isStateEditable && data?.state?._id === editableId &&  rowIndex === ind ? (
+                        {isStateEditable &&
+                        data?.state?._id === editableId &&
+                        rowIndex === ind ? (
                           <>
                             <input
                               name="add_new_state"
@@ -648,13 +680,14 @@ const ManageData = () => {
                           </>
                         )}
                         {!isStateEditable ||
-                        !(data?.state?._id === editableId) ||  !(rowIndex === ind)? (
+                        !(data?.state?._id === editableId) ||
+                        !(rowIndex === ind) ? (
                           <Edit2Icon
                             onClick={() => {
                               setIsStateEditable(true);
                               setStateEditableText(data?.state?.name);
                               setEditableId(data?.state?._id);
-                              setRowIndex(ind)
+                              setRowIndex(ind);
                             }}
                             className="w-4 h-4 cursor-pointer text-blue-500"
                           />
@@ -676,8 +709,18 @@ const ManageData = () => {
                                 }}
                                 className="text-green-500 hover:text-green-600"
                               />
-                              <Trash2  className="text-red-500 hover:text-red-600" onClick={()=>{alert("coming soon")}}/>
-                            <MapPin className="text-purple-500 hover:text-purple-600" onClick={()=>{alert("coming soon")}}/>
+                              <Trash2
+                                className="text-red-500 hover:text-red-600"
+                                onClick={() => {
+                                  alert("coming soon");
+                                }}
+                              />
+                              <MapPin
+                                className="text-purple-500 hover:text-purple-600"
+                                onClick={() => {
+                                  alert("coming soon");
+                                }}
+                              />
                             </div>
                           </span>
                         )}
@@ -717,7 +760,12 @@ const ManageData = () => {
                         ) : (
                           <div className="flex gap-1 cursor-pointer ">
                             <SaveIcon
-                              onClick={()=>{handleDistrictUpdate(data?.district?.name,data?.district?._id)}}
+                              onClick={() => {
+                                handleDistrictUpdate(
+                                  data?.district?.name,
+                                  data?.district?._id
+                                );
+                              }}
                               className="text-blue-500 hover:text-blue-600"
                             />
                             <PlusIcon
@@ -726,8 +774,18 @@ const ManageData = () => {
                               }}
                               className="text-green-500 hover:text-green-600"
                             />
-                            <Trash2  className="text-red-500 hover:text-red-600" onClick={()=>{alert("coming soon")}}/>
-                            <MapPin className="text-purple-500 hover:text-purple-600" onClick={()=>{alert("coming soon")}}/>
+                            <Trash2
+                              className="text-red-500 hover:text-red-600"
+                              onClick={() => {
+                                alert("coming soon");
+                              }}
+                            />
+                            <MapPin
+                              className="text-purple-500 hover:text-purple-600"
+                              onClick={() => {
+                                alert("coming soon");
+                              }}
+                            />
                           </div>
                         )}
                       </div>
@@ -768,7 +826,12 @@ const ManageData = () => {
                         ) : (
                           <div className="flex gap-1 cursor-pointer ">
                             <SaveIcon
-                              onClick={()=>{handleSubDistrictUpdate(data?.sub_district?.name,data?.sub_district?._id)}}
+                              onClick={() => {
+                                handleSubDistrictUpdate(
+                                  data?.sub_district?.name,
+                                  data?.sub_district?._id
+                                );
+                              }}
                               className="text-blue-500 hover:text-blue-600"
                             />
                             <PlusIcon
@@ -777,8 +840,18 @@ const ManageData = () => {
                               }}
                               className="text-green-500 hover:text-green-600"
                             />
-                           <Trash2  className="text-red-500 hover:text-red-600" onClick={()=>{alert("coming soon")}}/>
-                            <MapPin className="text-purple-500 hover:text-purple-600" onClick={()=>{alert("coming soon")}}/>
+                            <Trash2
+                              className="text-red-500 hover:text-red-600"
+                              onClick={() => {
+                                alert("coming soon");
+                              }}
+                            />
+                            <MapPin
+                              className="text-purple-500 hover:text-purple-600"
+                              onClick={() => {
+                                alert("coming soon");
+                              }}
+                            />
                           </div>
                         )}
                       </div>
@@ -818,7 +891,9 @@ const ManageData = () => {
                         ) : (
                           <div className="flex gap-1 cursor-pointer ">
                             <SaveIcon
-                              onClick={()=>{handleGPUpdate(data?.gp?.name,data?.gp?._id)}}
+                              onClick={() => {
+                                handleGPUpdate(data?.gp?.name, data?.gp?._id);
+                              }}
                               className="text-blue-500 hover:text-blue-600"
                             />
                             <PlusIcon
@@ -827,8 +902,18 @@ const ManageData = () => {
                               }}
                               className="text-green-500 hover:text-green-600"
                             />
-                            <Trash2  className="text-red-500 hover:text-red-600" onClick={()=>{alert("coming soon")}}/>
-                            <MapPin className="text-purple-500 hover:text-purple-600" onClick={()=>{alert("coming soon")}}/>
+                            <Trash2
+                              className="text-red-500 hover:text-red-600"
+                              onClick={() => {
+                                alert("coming soon");
+                              }}
+                            />
+                            <MapPin
+                              className="text-purple-500 hover:text-purple-600"
+                              onClick={() => {
+                                alert("coming soon");
+                              }}
+                            />
                           </div>
                         )}
                       </div>
@@ -879,8 +964,18 @@ const ManageData = () => {
                               }}
                               className="text-green-500 hover:text-green-600"
                             />
-                            <Trash2  className="text-red-500 hover:text-red-600" onClick={()=>{alert("coming soon")}}/>
-                            <MapPin className="text-purple-500 hover:text-purple-600" onClick={()=>{alert("coming soon")}}/>
+                            <Trash2
+                              className="text-red-500 hover:text-red-600"
+                              onClick={() => {
+                                alert("coming soon");
+                              }}
+                            />
+                            <MapPin
+                              className="text-purple-500 hover:text-purple-600"
+                              onClick={() => {
+                                alert("coming soon");
+                              }}
+                            />
                           </div>
                         )}
                       </div>

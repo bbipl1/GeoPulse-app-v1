@@ -1,25 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { Filter, X } from "lucide-react";
 import BaseMap from "./BaseMap";
-import useGetData from "./GetData";
+import L from "leaflet";
+import MapSidebar from "./mapSideBar/MapSidebar";
+import { useEffect, useState } from "react";
+import { MapContext, useLeafletMap } from "../contextProvider/MapContext";
+import useFilteredGeoData from "../data/featureCollectionsData/useFilteredGeoData";
 
 const CustomMap = () => {
-  const [filterToggle, setFilterToggle] = useState(false);
+  // const [mapRef,setMapRef]=useState(null);
+  const [map, setMap] = useState(null);
+  const [filteredData, setFilteredData] = useState(null);
 
-  const {
-    countries,
-    selectedCountry,
-    setSelectedCountry,
-    states,
-    selectedState,
-    setSelectedState,
-    districts,
-    setSelectedDistrict,
-    subDistricts,
-    setSelectedSubDistrict,
-    filteredData,
-  } = useGetData();
-
+  // const map=useMap();
   const filterDat = {
     states_and_uts: [
       {
@@ -879,132 +870,75 @@ const CustomMap = () => {
     ],
   };
 
-  return (
-    <div className="relative">
-      <div className="absolute left-0 top-0 z-10">
-        <BaseMap></BaseMap>
+  const fc = {
+    type: "FeatureCollection",
+    features: [
+      {
+        type: "Feature",
+        properties: {
+          village: "Sattar",
+          district: "Saharsa",
+          state: "Bihar",
+        },
+        geometry: {
+          type: "Polygon",
+          coordinates: [
+            [
+              [86.5901, 25.881],
+              [86.592, 25.8825],
+              [86.5932, 25.88],
+              [86.5905, 25.8792],
+              [86.5901, 25.881],
+            ],
+          ],
+        },
+      },
+    ],
+  };
+
+  useEffect(() => {
+    console.log(filteredData);
+    if (map) {
+      const layer = L.geoJSON(filteredData, {
+        style: {
+          color: "blue",
+          fillColor: "#3f0",
+          fillOpacity: 0.5,
+          weight: 2,
+        },
+        pointToLayer: function (feature, latlng) {
+          return L.marker(latlng).bindPopup(`
+      <div>
+        <strong>${feature.properties.name || "No name"}</strong><br/>
+        Category: ${feature.properties.category || "N/A"}<br/>
+        Description: ${feature.properties.description || "N/A"}
       </div>
+    `);
+        },
+      }).addTo(map);
 
-      {filterToggle ? (
-        <>
-          <div className="absolute left-12 top-4 z-10 ">
-            <div className="border-2 bg-white opacity-80 p-4">
-              <div
-                onClick={() => {
-                  setFilterToggle(false);
-                }}
-                className="absolute flex justify-end w-5/6 overflow-hidde"
-              >
-                <X className="cursor-pointer" />
-              </div>
-              <div className="text-lg py-4 flex justify-center">
-                Filter options
-              </div>
-              <div className="">
-                <div className="">
-                  <div className="">
-                    <label htmlFor="country" className="font-bold">Country</label>
-                  </div>
-                  <div>
-                    <select
-                      name="country"
-                      id="country"
-                      className="w-full"
-                      onChange={(e) => {
-                        setSelectedCountry(e.target.value);
-                      }}
-                    >
-                      <option value="">Select</option>
-                      {countries &&
-                        Array.isArray(countries) &&
-                        countries.map((c) => <option>{c}</option>)}
-                    </select>
-                  </div>
-                </div>
-                <div className="">
-                  <div>
-                    <label htmlFor="state" className="font-bold">State</label>
-                  </div>
+      // map.fitBounds(layer.getBounds());
 
-                  <div>
-                    <select
-                      name="state"
-                      id="state"
-                      className="w-full"
-                      onChange={(e) => {
-                        setSelectedState(e.target.value);
-                      }}
-                    >
-                      <option value="">Select</option>
-                      {states &&
-                        Array.isArray(states) &&
-                        states.map((s) => <option>{s}</option>)}
-                    </select>
-                  </div>
-                </div>
-                <div className="">
-                  <div>
-                    <label htmlFor="district" className="font-bold">District</label>
-                  </div>
+      // Optional: cleanup
+      return () => {
+        map?.removeLayer(layer);
+      };
+    }
+  }, [filteredData, map]);
 
-                  <div>
-                    <select
-                      name="district"
-                      id="district"
-                      className="w-full"
-                      onChange={(e) => {
-                        setSelectedDistrict(e.target.value);
-                      }}
-                    >
-                      <option value="">Select</option>
-                      {districts &&
-                        Array.isArray(districts) &&
-                        districts.map((d) => <option>{d}</option>)}
-                    </select>
-                  </div>
-                </div>
-                <div className="">
-                  <div>
-                    <label htmlFor="block" className="font-bold">Block</label>
-                  </div>
-                  <div>
-                    <select
-                      name="block"
-                      id="block"
-                      className="w-full"
-                      onChange={(e) => {
-                        setSelectedSubDistrict(e.target.value);
-                      }}
-                    >
-                      <option value="">Select</option>
-                      {subDistricts &&
-                        Array.isArray(subDistricts) &&
-                        subDistricts.map((sd) => <option>{sd}</option>)}
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div>
-                <button onClick={()=>{alert("Loading please wait."); setFilterToggle(!filterToggle)}} className="w-full text-center rounded-md bg-green-500 text-white mt-4">Submit</button>
-              </div>
-            </div>
+  return (
+    <MapContext.Provider value={{ map, setMap }}>
+      <div className="relative">
+        <div className="absolute left-0 top-0 z-10">
+          <BaseMap></BaseMap>
+        </div>
+        <div className="absolute left-2 top-20 z-10">
+          <div>
+            <MapSidebar setFilteredData={setFilteredData} />
           </div>
-        </>
-      ) : (
-        <>
-          <div className="absolute left-2 top-24 z-10">
-            <div
-              onClick={() => {
-                setFilterToggle(!filterToggle);
-              }}
-              className=" bg-white rounded-md p-1"
-            >
-              <Filter />
-            </div>
-          </div>
-        </>
-      )}
-    </div>
+        </div>
+      </div>
+    </MapContext.Provider>
   );
 };
 
