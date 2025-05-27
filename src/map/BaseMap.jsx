@@ -42,7 +42,7 @@ const BaseMap = () => {
           {/* <Marker position={[26.8467, 80.9462]}>
             <Popup>Lucknow</Popup>
           </Marker> */}
-          <Points></Points>
+          {/* <Points></Points> */}
         </MapContainer>
       </div>
     

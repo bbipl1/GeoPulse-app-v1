@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import useGetData from "../../map/GetData";
 import { type } from "@testing-library/user-event/dist/type";
 import apiService from "../../api/services/apiService";
+import FullScreenLoader from "../../components/FullScreenLoader";
 
 const FeatureCollectionsManagement = ({ setManFeatureColl }) => {
   const [geometry, setGeometry] = useState(null);
@@ -12,6 +13,7 @@ const FeatureCollectionsManagement = ({ setManFeatureColl }) => {
   const [category, setCategory] = useState(null);
   const [descriptions, setDiscriptions] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [jsonFile,setJsonFile]=useState(null);
 
   const {
     countries,
@@ -36,7 +38,31 @@ const FeatureCollectionsManagement = ({ setManFeatureColl }) => {
   } = useGetData();
 
   const hanldeUpload = () => {
-    alert("coming soon.");
+    setLoading(true);
+    console.log(jsonFile)
+    if(!jsonFile){
+      return alert("Kindly select the file.");
+    }
+    if(jsonFile.type!=='application/json'){
+      return alert("Choosen file type is not valid.");
+    }
+    const suburl =
+      "/api/v1/admin/feature_collections_data/add_feature_collection_file_data";
+      const filePayload=new FormData();
+      filePayload.append("jsonFile",jsonFile);
+      apiService.postWithFile(suburl,filePayload)
+      .then((res) => {
+        console.log(res);
+        alert(res?.msg);
+      })
+      .catch((err) => {
+        console.log(err);
+        alert(err?.response?.data?.err);
+      })
+      .finally((final) => {
+        setLoading(false);
+      });
+      
   };
 
   const handleSubmit = () => {
@@ -86,8 +112,11 @@ const FeatureCollectionsManagement = ({ setManFeatureColl }) => {
         setLoading(false);
       });
   };
+
   return (
     <div className="max-w-full w-full min-h-full h-full absolute z-50 top-16 left-0 overflow-y-auto bg-blue-600 text-white">
+
+      {loading && <><FullScreenLoader/></>}
       <X
         size={36}
         className="cursor-pointer flex justify-self-end text-red-600"
@@ -290,10 +319,17 @@ const FeatureCollectionsManagement = ({ setManFeatureColl }) => {
         <div className="flex justify-center items-center flex-col mt-4">
           <div>
             <div>
-              <label htmlFor="file">Select file</label>
+              <label htmlFor="file">Select file ( JSON file only )</label>
             </div>
             <div>
-              <input type="file" id="file" name="file" />
+              <input 
+              type="file"
+               id="file"
+                name="file"
+                // value={jsonFile}
+                onChange={(e)=>{setJsonFile(e.target.files[0])}}
+                
+                />
             </div>
           </div>
           <div className="w-full flex justify-center mt-8">
