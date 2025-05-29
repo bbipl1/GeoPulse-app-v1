@@ -21,6 +21,7 @@ import {
   AuthContextProvider,
 } from "./AllPages";
 import ManageData from "./data/ManageData";
+import AdministrativeFilterContextProvider from "./contextProvider/AdministrativeFilterContextProvider";
 
 const routerEle = (
   <Route path="/" element={<Layout />} errorElement={<Error />}>
@@ -40,7 +41,10 @@ root.render(
   <React.StrictMode>
     <ThemeContextProvider>
       <AuthContextProvider>
+        <AdministrativeFilterContextProvider>
+
         <RouterProvider router={browserRoute}>{/* <App /> */}</RouterProvider>
+        </AdministrativeFilterContextProvider>
       </AuthContextProvider>
     </ThemeContextProvider>
   </React.StrictMode>

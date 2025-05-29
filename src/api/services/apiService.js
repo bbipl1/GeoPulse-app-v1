@@ -25,9 +25,9 @@ const apiService = {
       throw err;
     }
   },
-  get: async (subURL) => {
+  get: async (subURL,params) => {
     try {
-      const res = await jsonApiClient.get(subURL);
+      const res = await jsonApiClient.get(subURL,params);
       return res?.data;
     } catch (err) {
       throw err;

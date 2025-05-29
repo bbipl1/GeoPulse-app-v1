@@ -1,10 +1,18 @@
 import React, { useEffect, useState } from "react";
 import useGetData from "../GetData";
 import { Filter, X } from "lucide-react";
-import useFilteredGeoData from "../../data/featureCollectionsData/useFilteredGeoData";
+import { useAdministrativeContext } from "../../contextProvider/AdministrativeFilterContextProvider";
 
-const DataFilter = ({setFilteredData}) => {
+const DataFilter = ({ setFilteredData }) => {
   const [filterToggle, setFilterToggle] = useState(false);
+  const{
+    setCountry,
+    setState,
+    setDistrict,
+    setSubDistrict,
+    setGp,
+    setVillage_town,
+   } = useAdministrativeContext();
 
   const {
     countries,
@@ -17,6 +25,7 @@ const DataFilter = ({setFilteredData}) => {
     selectedDistrict,
     setSelectedDistrict,
     subDistricts,
+    selectedSubDistrict,
     setSelectedSubDistrict,
     filteredData,
     gp,
@@ -24,23 +33,51 @@ const DataFilter = ({setFilteredData}) => {
     setSelectedGP,
     villages_towns,
     selectedVillages_towns,
-    setSelectedVillages_towns
+    setSelectedVillages_towns,
   } = useGetData();
 
-const { data } = useFilteredGeoData({
-  country: selectedCountry,
-  state: selectedState,
-  district: selectedDistrict,
-  gp: selectedGP,
-  village_town: selectedVillages_towns,
-});
+  // const { data } = useFilteredGeoData({
+  //   country: selectedCountry,
+  //   state: selectedState,
+  //   district: selectedDistrict,
+  //   sub_district: selectedDistrict,
+  //   gp: selectedGP,
+  //   village_town: selectedVillages_towns,
+  // });
 
-
-  useEffect(()=>{
-    if(data){
-        setFilteredData(data);
+  useEffect(() => {
+    if (selectedCountry) {
+      setCountry(selectedCountry);
     }
-  },[data, setFilteredData])
+    if (selectedState) {
+      setState(selectedState);
+    }
+    if (selectedDistrict) {
+      setDistrict(selectedDistrict);
+    }
+    if (selectedSubDistrict) {
+      setSubDistrict(selectedSubDistrict);
+    }
+    if (selectedGP) {
+      setGp(selectedGP);
+    }
+    if (selectedVillages_towns) {
+      setVillage_town(selectedVillages_towns);
+    }
+  }, [
+    selectedCountry,
+    selectedState,
+    selectedDistrict,
+    selectedSubDistrict,
+    selectedGP,
+    selectedVillages_towns,
+    setCountry,
+    setState,
+    setDistrict,
+    setSubDistrict,
+    setGp,
+    setVillage_town,
+  ]);
 
   return (
     <div>
@@ -158,7 +195,7 @@ const { data } = useFilteredGeoData({
                     </div>
                   </div>
                 </div>
-                <div>
+                {/* <div>
                   <button
                     onClick={() => {
                       alert("Loading please wait.");
@@ -168,7 +205,7 @@ const { data } = useFilteredGeoData({
                   >
                     Submit
                   </button>
-                </div>
+                </div> */}
               </div>
             </div>
           </>

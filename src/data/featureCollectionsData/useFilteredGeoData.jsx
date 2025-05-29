@@ -1,18 +1,11 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import apiService from "../../api/services/apiService";
+import { useAdministrativeContext } from "../../contextProvider/AdministrativeFilterContextProvider";
 
-const useFilteredGeoData = (filters = {}) => {
-  const {
-    country,
-    state,
-    district,
-    sub_district,
-    gp,
-    village_town,
-    category,
-    geometry_type,
-  } = filters;
+const useFilteredGeoData = () => {
+  const {country,state,district,sub_district,gp,village_town,category,geometry_type}=useAdministrativeContext();
+  
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -36,8 +29,8 @@ const useFilteredGeoData = (filters = {}) => {
         const suburl =
           "/api/v1/admin/feature_collections_data/get_feature_collection_data";
         const response = await apiService.get(suburl, { params });
-        setData(response.data[0]);
-        // console.log(response.data[0])
+        setData(response.data[0] || []);
+        console.log("suburl",response.data[0])
       } catch (err) {
         setError(err.message || "Error fetching data");
       } finally {
